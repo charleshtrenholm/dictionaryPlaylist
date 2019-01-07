@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css?family=Coiny|Quicksand');
+
+@keyframes body{
+    /* 0% {background-image: linear-gradient(rgb(243,210,22), rgb(251, 255, 176));}
+    50% {background-image: linear-gradient(rgb(251, 255, 176), rgb(243,210,22));}
+    100% {background-image: linear-gradient(rgb(243,210,22), rgb(251, 255, 176));} */
+    0% {background-color: rgb(243,210,22)}
+    50% {background-color: rgb(251, 255, 176)}
+    100% {background-color: rgb(243,210,22)}
+}
+
+body{
+    animation-name: body;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    transform: translateZ(0);
+}
+
+.bodywrapper{
+    background-image: url('background2.svg');
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1{
+    text-align: center;
+    font-family: 'Coiny', cursive;
+    font-size: 4em;
+}
+
+#todaysWord{
+    background-color: black;
+    border-radius: 120px;
+    text-shadow: 4px 4px rgb(243, 132, 132);
+}
+
+@media only screen and (max-width: 1200px){
+    h1{
+        font-size: 2em;
+    }
+    .display-3{
+        font-size: 4em;
+    }
+}
+
+h2{
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    font-size: 2.5em;
+}
+
+p{
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.5em;
+}
+
+.header{
+    text-align: center;
+    font-weight: bold;
+    background-image: linear-gradient(rgb(245, 210, 22), rgb(243, 132, 132));
+    border-radius: 30px;
+    padding-top: 10px;
+}
+
+
+.body{
+    background-color: rgb(243,180,22);
+    margin-top: 10px;
+    border-radius: 30px;
+    padding: 10px;
+    text-align: center;
+}
+
+.cheeky{
+    font-family: 'Coiny', cursive;
+    text-shadow: 2px 2px black;
+    /* color: black; */
+}
+
+.jumbotron{
+    border-radius: 20px;
+    color: white;
+    background-image: linear-gradient(rgb(243, 132, 132),rgb(245, 210, 22));
+}
+
+.display-3{
+    font-size: 7em;
+    text-shadow: 5px 5px black;
+}
+
+.divide{
+    background-color: white;
+}
+
+a{
+    color:white;
+    text-decoration: underline;
+}
+
+
+.btn{
+    border-radius: 30px;
+    background-color: rgb(243, 132, 132);
+    text-decoration: none;
+    border: none;
+    margin: 15px;
+    margin-top: 50px;
+}
+
+.btn:hover{
+    background-color: rgb(192, 103, 103);
+}
+
+.modal{
+    margin-top: 700px;
+}
+
+.modal-content{
+    background-color: rgb(243,132,132);
+    border-radius: 30px;
+}
+
+.modal-button{
+    background-color: rgb(192, 103, 103);
+    width: 95%;
+}
+
+.modal-button:hover{
+    background-color: rgb(163, 86, 86);
+}
+
+button{
+    border: none;
+}
+button:after{
+    border: none;
+}
+
+.user-word{
+    color: white;
+    font-family: 'Coiny', cursive;
+    text-shadow: 2px 2px black;
+}
+
+#user-word-container{
+    font-size: 2em;
+}
+
+.bottom-button{
+    width: 40%;
+}
+
+#userDialog{
+    width: 600px;
+}

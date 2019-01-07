@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'streaming/main.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="modal" id="createPlaylist" tabindex="-1" role="dialog" aria-labelledby="createUserPlaylist" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createUserPlaylist">Create your own playlist</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <form action="/create" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="word">Create Your Word Playlist!</label>
+                            <input type="text" class="form-control" id="word" name="word" placeholder="Your word here!" autofocus>
+                            <input type="submit" value="Create" class="btn btn-dark modal-button">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="userSignup" tabindex="-1" role="dialog" aria-labelledby="userSignupForm" aria-hidden="true">
+            <div class="modal-dialog" role="document" id="userDialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userSignupForm">Create your own playlist</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <form action="/signup" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="first_name">First Name:</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Bubba" autofocus>
+                                <lable for="last_name">Last Name:</lable>
+                                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Gump">
+                                <label for="email">Email:</label>
+                                <input type="text" class="form-control" id="email" name="email" placeholder="shrimpforever@letsdietoget.her">
+                                <label for="password">Password:</label>
+                                <input type="password" class="form-control" id="password" name="password">
+                                <label for="pw_confirm">Confirm Password:</label>
+                                <input type="password" class="form-control" id="pw_confirm" name="pw_confirm">
+                                <input type="radio" class="form-control" name="email_option" id="all_emails" value="all_emails"><label for="all_emails">Please send me emails about everything!</label>
+                                <input type="radio" class="form-control" name="email_option" value="only_playlists">Only send me emails about the daily playlist<br>
+                                <input type="radio" class="form-control" name="email_option" value="no_emails">Literally never email me.
+                                </div>
+                                <input type="submit" value="Create" class="btn btn-dark modal-button">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer"></div>
+                </div>
+            </div>
+        </div>
+    <div class="bodywrapper">
+        <h1>WordBangers!</h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 header container">
+                <p>Generating playlists based off Merriam-Webster's Word of the Day since 2018</p>
+                {% for message in messages %}
+                    {% if messages %}
+                        <p style="color: red;">{{message}}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 container body">
+                <p class="intro">Todays word of the day:</p>
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h1 class="display-3" id="todaysWord">{{word}}</h1>
+                        {{defs|safe}}
+                        <hr class="divide">
+                        <p class="lead">Source: <a href="https://www.merriam-webster.com/word-of-the-day">Merriam-Webster</a></p>
+                    </div>
+                    <hr class="divide">
+                    <p>Playlist with <span class="cheeky">bangers</span> containing the word "{{word}}"</p>
+                    <iframe src="https://open.spotify.com/embed/search/q={{word}}" width="800" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <div class="row justify-content-center">
+                        <button type="button" class="col-lg-3 col-md-3 col-sm-12 col-xs-12 btn btn-dark" data-toggle="modal" data-target="#createPlaylist">Create your own word playlist</button>
+                        <button type="button" class="col-lg-3 col-md-3 col-sm-12 col-xs-12 btn btn-dark"
+                        data-toggle="modal" data-target="#userSignup">Create an account</button>
+                        <a class="col-lg-3 col-md-3 col-sm-12 col-xs-12 btn btn-dark" href="/signup">Create your own playlist</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="modal fade" id="createPlaylist" tabindex="-1" role="dialog" aria-labelledby="createUserPlaylist" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createUserPlaylist">Create your own playlist</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <form action="/create" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="word">Create Your Word Playlist!</label>
+                        <input type="text" class="form-control" id="word" name="word" placeholder="Your word here!" autofocus>
+                        <input type="submit" value="Create" class="btn btn-dark">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
