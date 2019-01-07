@@ -7,7 +7,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 
-client_credentials_manager = SpotifyClientCredentials(client_id ="0073769af7114279846e60afe97cd66", client_secret ="bd3913da8e2f4c8db59503e69bf77fc6")
+client_credentials_manager = SpotifyClientCredentials(client_id ="client id", client_secret ="client secret")
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 def index(request):
