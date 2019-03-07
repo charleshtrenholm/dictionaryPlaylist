@@ -37,7 +37,24 @@ class User(models.Model):
     def __repr__(self):
         return "<user first name: {}, last name: {}, email: {}, email option: {}>".format(self.first_name, self.last_name, self.email, self.email_option)
 
+class PlaylistManager(models.Manager):
+    def check_db_for_playlist(self, word):
+        playlists = Playlist.objects.all()
+        for playlist in playlists:
+            if playlist.word == word:
+                return playlist
+        return False
+
 class Playlist(models.Model):
-    name = models.CharField(max_length = 255)
+    word = models.CharField(max_length = 255)
+    objects = PlaylistManager()
+
+class URI(models.Model):
+    string_val = models.CharField(max_length = 255)
+    playlist = models.ForeignKey(Playlist, related_name = 'uris', on_delete = models.PROTECT)
+
+
+
+
 
 # Create your models here.

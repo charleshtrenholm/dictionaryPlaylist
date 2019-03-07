@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^result$', views.result),
     url(r'^signup$', views.signup),
     url(r'^success$', views.success),
-    url(r'^logout$', views.logout)
+    url(r'^logout$', views.logout),
+    url(r'^new-song$', views.newSong)
 ]

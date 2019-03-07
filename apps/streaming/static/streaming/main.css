@@ -99,6 +99,15 @@ a{
     text-decoration: underline;
 }
 
+#next-song{
+    background-color: black!important;
+    font-size: 2em;
+}
+
+#next-song.cheeky{
+    font-family: 'coiny', cursive;
+    text-shadow: rgb(243,132,132)!important;
+}
 
 .btn{
     border-radius: 30px;

@@ -1,17 +1,17 @@
 from django.shortcuts import render, redirect
 from bs4 import BeautifulSoup, Tag, NavigableString
-import re, requests, bcrypt
-from .models import User, Playlist
+import re, requests, bcrypt, random, json
+from .models import User, Playlist, URI
 from django.contrib import messages
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 
-client_credentials_manager = SpotifyClientCredentials(client_id ="client id", client_secret ="client secret")
+client_credentials_manager = SpotifyClientCredentials(client_id ="0073769af7114279846e60afed97cd66", client_secret ="39b0eee9b61b41d5a0d1497961ed5d3b")
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 def index(request):
-    url = 'https://www.merriam-webster.com/word-of-the-day'
+    url = 'https://www.merriam-webster.com/word-of-the-day/'
     response = requests.get(url)
     html = response.content
     soup = BeautifulSoup(html, 'html.parser')
@@ -35,17 +35,33 @@ def index(request):
                         runner = runner.next_element
         runner = runner.next_element
 
-    print (isinstance(word, str))
-
-    # results = sp.search(q="songs:" + word, limit = 20, type="song")
-    # print(results)
+    saved_playlist = Playlist.objects.check_db_for_playlist(word = word)
+    if saved_playlist: 
+        print('The playlist has been saved', saved_playlist.uris)
+        uris = URI.objects.all()
+    else:
+        results = sp.search(q=word, limit=20, type="track")
+        uris = [ i['uri'] for i in results['tracks']['items'] ] #todo: revise this arraye
+        p = Playlist(word = word)
+        p.save()
+        for uri in uris: 
+            u = URI(string_val = uri, playlist = p)
+            u.save()
 
     context = {
         'word' : word,
-        'defs' : defs
+        'defs' : defs,
+        'track' : uris[0]
     }
 
     return render(request, 'streaming/index.html', context)
+
+def newSong(request):
+    print('PARAMS', request.params.word)
+    playlist = Playlist.objects.get(word = request.params.word)
+    newURI = playlist.uris[random.randInt(0, len(playlist.uris) - 1)]
+    result = {'value' : newURI}
+    return json.dumps(result)
 
 def create(request):
     if 'word' not in request.session:
