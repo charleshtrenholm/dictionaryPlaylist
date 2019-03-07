@@ -1,21 +1,24 @@
 from django.shortcuts import render, redirect
 from bs4 import BeautifulSoup, Tag, NavigableString
-import re, requests, bcrypt, random, json
+import re, requests, bcrypt, random, json, os
 from .models import User, Playlist, URI
 from django.contrib import messages
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from dotenv import load_dotenv
 
+load_dotenv()
 
-client_credentials_manager = SpotifyClientCredentials(client_id ="0073769af7114279846e60afed97cd66", client_secret ="39b0eee9b61b41d5a0d1497961ed5d3b")
+client_credentials_manager = SpotifyClientCredentials(client_id = os.getenv('SPOTIFY_CLIENT_ID'), client_secret = os.getenv('SPOTIFY_CLIENT_SECRET'))
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 def index(request):
-    url = 'https://www.merriam-webster.com/word-of-the-day/'
+    url = 'https://www.merriam-webster.com/word-of-the-day/sentient-2019-03-03'
     response = requests.get(url)
     html = response.content
     soup = BeautifulSoup(html, 'html.parser')
     word = soup.h1.string
+    print("WORD:", word)
     defTable = soup.find('div', attrs = {'class' : 'wod-definition-container'})
 
     if 'login' not in request.session:
@@ -38,10 +41,15 @@ def index(request):
     saved_playlist = Playlist.objects.check_db_for_playlist(word = word)
     if saved_playlist: 
         print('The playlist has been saved', saved_playlist.uris)
-        uris = URI.objects.all()
+        uris = URI.objects.filter(playlist = saved_playlist)
+        print('URIS', uris)
+        track = uris[0].string_val
     else:
         results = sp.search(q=word, limit=20, type="track")
-        uris = [ i['uri'] for i in results['tracks']['items'] ] #todo: revise this arraye
+        print('RESULTS:::::::::>', results)
+        uris = [i['uri'] for i in results['tracks']['items']] #todo: revise this arraye
+        print("URIS:::::::::>", uris)
+        track = uris[0]
         p = Playlist(word = word)
         p.save()
         for uri in uris: 
@@ -51,15 +59,15 @@ def index(request):
     context = {
         'word' : word,
         'defs' : defs,
-        'track' : uris[0]
+        'track' : track
     }
 
     return render(request, 'streaming/index.html', context)
 
 def newSong(request):
-    print('PARAMS', request.params.word)
-    playlist = Playlist.objects.get(word = request.params.word)
-    newURI = playlist.uris[random.randInt(0, len(playlist.uris) - 1)]
+    word = request.GET.get('word', None)
+    uris = URI.objects.filter(playlist=word)
+    newURI = uris[random.randInt(1, len(playlist.uris) - 1)].string_val
     result = {'value' : newURI}
     return json.dumps(result)
 
